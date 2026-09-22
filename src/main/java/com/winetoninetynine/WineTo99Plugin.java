@@ -64,7 +64,7 @@ public class WineTo99Plugin extends Plugin
 	protected void startUp()
 	{
 		resetAllState();
-		BufferedImage pluginIcon = ImageUtil.loadImageResource(getClass(), "/icon.png");
+		BufferedImage pluginIcon = ImageUtil.loadImageResource(getClass(), "wine_to_99_icon.png");
 
 		WineTo99Panel newPanel = new WineTo99Panel(
 			pluginIcon,
