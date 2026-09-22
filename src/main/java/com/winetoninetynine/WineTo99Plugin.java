@@ -4,6 +4,7 @@
  */
 package com.winetoninetynine;
 
+import java.awt.image.BufferedImage;
 import java.time.Duration;
 import java.time.Instant;
 import javax.inject.Inject;
@@ -21,11 +22,11 @@ import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.util.ImageUtil;
 
 @Slf4j
 @PluginDescriptor(
@@ -46,9 +47,6 @@ public class WineTo99Plugin extends Plugin
 	@Inject
 	private ClientToolbar clientToolbar;
 
-	@Inject
-	private ItemManager itemManager;
-
 	private final WineTrackerSession session = new WineTrackerSession();
 	private final WineProductionCounter productionCounter = new WineProductionCounter();
 
@@ -66,13 +64,14 @@ public class WineTo99Plugin extends Plugin
 	protected void startUp()
 	{
 		resetAllState();
+		BufferedImage pluginIcon = ImageUtil.loadImageResource(getClass(), "/icon.png");
 
 		WineTo99Panel newPanel = new WineTo99Panel(
-			itemManager.getImage(ItemID.JUG_WINE),
+			pluginIcon,
 			() -> clientThread.invoke(this::resetSession));
 		NavigationButton newNavigationButton = NavigationButton.builder()
 			.tooltip("Wine to 99")
-			.icon(itemManager.getImage(ItemID.JUG_WINE))
+			.icon(pluginIcon)
 			.priority(5)
 			.panel(newPanel)
 			.build();

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo.png" alt="Wine to 99 logo" width="256">
+</p>
+
 # Wine to 99
 
 A RuneLite sidebar plugin for tracking a wine-making grind to level 99 Cooking.
