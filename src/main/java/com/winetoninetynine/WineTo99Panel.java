@@ -41,6 +41,7 @@ final class WineTo99Panel extends PluginPanel
 	private final JLabel bankJugsOfWater = valueLabel();
 	private final JLabel winesPerHour = valueLabel();
 	private final JLabel xpPerHour = valueLabel();
+	private final JLabel timeUntil99 = valueLabel();
 	private final JLabel session = new JLabel("Session starts with your first wine", SwingConstants.CENTER);
 	private final JButton reset = new JButton("Reset session");
 
@@ -103,6 +104,7 @@ final class WineTo99Panel extends PluginPanel
 		metrics.add(metricRow("Jugs of Water in bank", bankJugsOfWater));
 		metrics.add(metricRow("Wines / hour", winesPerHour));
 		metrics.add(metricRow("Cooking XP / hour", xpPerHour));
+		metrics.add(metricRow("Time until 99", timeUntil99));
 		content.add(metrics);
 		content.add(Box.createRigidArea(new Dimension(0, 10)));
 
@@ -122,6 +124,7 @@ final class WineTo99Panel extends PluginPanel
 		bankJugsOfWater.setToolTipText("Most recently observed jug-of-water count. Open your bank to refresh it.");
 		winesPerHour.setToolTipText("All wines mixed this session, whether they are still fermenting or have finished.");
 		xpPerHour.setToolTipText("Wines mixed per hour multiplied by 200 XP. Approximate below level 68.");
+		timeUntil99.setToolTipText("Estimated time to 99 at your current wines-per-hour rate (DD:HH:MM:SS).");
 
 		add(content, BorderLayout.NORTH);
 		showLoggedOut();
@@ -175,6 +178,9 @@ final class WineTo99Panel extends PluginPanel
 		winesPerHour.setText(NUMBER_FORMAT.format(snapshot.getWinesPerHour()));
 		String estimatePrefix = snapshot.getCookingLevel() < 68 ? "~" : "";
 		xpPerHour.setText(estimatePrefix + NUMBER_FORMAT.format(snapshot.getCookingXpPerHour()));
+		long secondsUntil99 = WineProgressCalculator.secondsUntil99(
+			snapshot.getWinesRemaining(), snapshot.getWinesPerHour());
+		timeUntil99.setText(secondsUntil99 < 0 ? "--" : formatGoalDuration(secondsUntil99));
 
 		session.setText("<html><center>Session: "
 			+ NUMBER_FORMAT.format(snapshot.getSessionWines()) + " wines &bull; "
@@ -197,6 +203,7 @@ final class WineTo99Panel extends PluginPanel
 		bankJugsOfWater.setText("--");
 		winesPerHour.setText("--");
 		xpPerHour.setText("--");
+		timeUntil99.setText("--");
 		session.setText("Session starts with your first wine");
 		reset.setEnabled(false);
 	}
@@ -208,5 +215,15 @@ final class WineTo99Panel extends PluginPanel
 		long minutes = totalSeconds % 3_600 / 60;
 		long seconds = totalSeconds % 60;
 		return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds);
+	}
+
+	private static String formatGoalDuration(long totalSeconds)
+	{
+		long nonNegativeSeconds = Math.max(0, totalSeconds);
+		long days = nonNegativeSeconds / 86_400;
+		long hours = nonNegativeSeconds % 86_400 / 3_600;
+		long minutes = nonNegativeSeconds % 3_600 / 60;
+		long seconds = nonNegativeSeconds % 60;
+		return String.format(Locale.US, "%02d:%02d:%02d:%02d", days, hours, minutes, seconds);
 	}
 }

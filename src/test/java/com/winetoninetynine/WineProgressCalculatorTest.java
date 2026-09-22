@@ -39,4 +39,28 @@ public class WineProgressCalculatorTest
 		assertEquals(62_147,
 			WineProgressCalculator.winesRemaining(Experience.getXpForLevel(68), 0));
 	}
+
+	@Test
+	public void timeUntil99UsesCurrentWineRate()
+	{
+		assertEquals(90_000, WineProgressCalculator.secondsUntil99(50_000, 2_000));
+	}
+
+	@Test
+	public void timeUntil99RoundsUpToAWholeSecond()
+	{
+		assertEquals(2, WineProgressCalculator.secondsUntil99(1, 2_399));
+	}
+
+	@Test
+	public void timeUntil99IsUnavailableWithoutAProductionRate()
+	{
+		assertEquals(-1, WineProgressCalculator.secondsUntil99(10, 0));
+	}
+
+	@Test
+	public void timeUntil99IsZeroWhenGoalIsComplete()
+	{
+		assertEquals(0, WineProgressCalculator.secondsUntil99(0, 0));
+	}
 }

@@ -22,6 +22,7 @@ final class WineProgressCalculator
 {
 	static final int XP_PER_WINE = 200;
 	static final int TARGET_XP = Experience.getXpForLevel(Experience.MAX_REAL_LEVEL);
+	static final long SECONDS_PER_HOUR = 3_600L;
 
 	private WineProgressCalculator()
 	{
@@ -37,5 +38,25 @@ final class WineProgressCalculator
 		int xpRemaining = Math.max(0, TARGET_XP - Math.max(0, currentXp));
 		int successfulWinesRequired = (xpRemaining + XP_PER_WINE - 1) / XP_PER_WINE;
 		return Math.max(0, successfulWinesRequired - Math.max(0, fermentingWines));
+	}
+
+	/**
+	 * Estimates the time needed to finish the goal at the current production rate.
+	 * Returns {@code -1} until a production rate is available.
+	 */
+	static long secondsUntil99(int winesRemaining, long winesPerHour)
+	{
+		if (winesRemaining <= 0)
+		{
+			return 0;
+		}
+
+		if (winesPerHour <= 0)
+		{
+			return -1;
+		}
+
+		long totalWineSeconds = (long) winesRemaining * SECONDS_PER_HOUR;
+		return (totalWineSeconds + winesPerHour - 1) / winesPerHour;
 	}
 }

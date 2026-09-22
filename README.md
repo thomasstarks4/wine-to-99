@@ -9,6 +9,7 @@ A RuneLite sidebar plugin for tracking a wine-making grind to level 99 Cooking.
 - Grapes and jugs of water in the most recently observed bank contents.
 - Wines mixed per active hour, including both fermenting and finished wines.
 - Potential Cooking XP per active hour at 200 XP per wine mixed.
+- Estimated time until 99 at the current production rate, shown as `DD:HH:MM:SS`.
 - Session wine, XP, and elapsed-time totals.
 
 The remaining-wine count immediately subtracts the current fermenting batch. If
