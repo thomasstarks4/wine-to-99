@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026, sailo
+ * Copyright (c) 2026, Zeno
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

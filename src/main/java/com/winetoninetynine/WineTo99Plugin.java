@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026, sailo
+ * Copyright (c) 2026, Zeno
  * All rights reserved.
  */
 package com.winetoninetynine;
