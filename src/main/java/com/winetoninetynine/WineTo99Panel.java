@@ -34,6 +34,8 @@ final class WineTo99Panel extends PluginPanel
 	private final JLabel status = new JLabel("Log in to begin tracking", SwingConstants.CENTER);
 	private final JLabel level = new JLabel("Cooking level --", SwingConstants.CENTER);
 	private final JLabel xpRemaining = new JLabel("-- XP remaining", SwingConstants.CENTER);
+	private final JLabel bankedXp = new JLabel("-- banked XP", SwingConstants.CENTER);
+	private final JLabel progressPercent = new JLabel("--% to 99", SwingConstants.CENTER);
 	private final JProgressBar progress = new JProgressBar(0, 10_000);
 	private final JLabel winesRemaining = valueLabel();
 	private final JLabel fermenting = valueLabel();
@@ -83,6 +85,16 @@ final class WineTo99Panel extends PluginPanel
 		xpRemaining.setAlignmentX(CENTER_ALIGNMENT);
 		xpRemaining.setForeground(Color.LIGHT_GRAY);
 		goal.add(xpRemaining);
+		goal.add(Box.createRigidArea(new Dimension(0, 3)));
+
+		bankedXp.setAlignmentX(CENTER_ALIGNMENT);
+		bankedXp.setForeground(Color.LIGHT_GRAY);
+		goal.add(bankedXp);
+		goal.add(Box.createRigidArea(new Dimension(0, 3)));
+
+		progressPercent.setAlignmentX(CENTER_ALIGNMENT);
+		progressPercent.setForeground(Color.LIGHT_GRAY);
+		goal.add(progressPercent);
 		goal.add(Box.createRigidArea(new Dimension(0, 8)));
 
 		progress.setAlignmentX(CENTER_ALIGNMENT);
@@ -90,7 +102,7 @@ final class WineTo99Panel extends PluginPanel
 		progress.setForeground(WINE_RED);
 		progress.setBackground(ColorScheme.DARK_GRAY_COLOR);
 		progress.setBorderPainted(false);
-		progress.setStringPainted(true);
+		progress.setStringPainted(false);
 		goal.add(progress);
 		content.add(goal);
 		content.add(Box.createRigidArea(new Dimension(0, 12)));
@@ -118,6 +130,7 @@ final class WineTo99Panel extends PluginPanel
 		reset.addActionListener(event -> resetAction.run());
 		content.add(reset);
 
+		bankedXp.setToolTipText("Potential Cooking XP from the currently fermenting wines at 200 XP each.");
 		winesRemaining.setToolTipText("Successful wines still needed after subtracting the current fermenting batch.");
 		fermenting.setToolTipText("Unfermented wine seen in your inventory and most recently opened bank.");
 		bankGrapes.setToolTipText("Most recently observed grape count. Open your bank to refresh it.");
@@ -163,11 +176,13 @@ final class WineTo99Panel extends PluginPanel
 
 		int remainingXp = Math.max(0, WineProgressCalculator.TARGET_XP - snapshot.getCurrentXp());
 		xpRemaining.setText(NUMBER_FORMAT.format(remainingXp) + " XP remaining");
+		bankedXp.setText(NUMBER_FORMAT.format(
+			WineProgressCalculator.bankedXp(snapshot.getFermentingWines())) + " banked XP");
 
 		double fraction = Math.max(0.0, Math.min(1.0,
 			snapshot.getCurrentXp() / (double) WineProgressCalculator.TARGET_XP));
 		progress.setValue((int) Math.round(fraction * 10_000));
-		progress.setString(String.format(Locale.US, "%.1f%% to 99", fraction * 100));
+		progressPercent.setText(String.format(Locale.US, "%.1f%% to 99", fraction * 100));
 
 		winesRemaining.setText(NUMBER_FORMAT.format(snapshot.getWinesRemaining()));
 		fermenting.setText(NUMBER_FORMAT.format(snapshot.getFermentingWines()));
@@ -195,8 +210,9 @@ final class WineTo99Panel extends PluginPanel
 		status.setForeground(Color.LIGHT_GRAY);
 		level.setText("Cooking level --");
 		xpRemaining.setText("-- XP remaining");
+		bankedXp.setText("-- banked XP");
+		progressPercent.setText("Waiting for player");
 		progress.setValue(0);
-		progress.setString("Waiting for player");
 		winesRemaining.setText("--");
 		fermenting.setText("--");
 		bankGrapes.setText("--");

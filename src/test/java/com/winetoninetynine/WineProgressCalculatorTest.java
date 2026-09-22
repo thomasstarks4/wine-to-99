@@ -41,6 +41,18 @@ public class WineProgressCalculatorTest
 	}
 
 	@Test
+	public void bankedXpUsesCurrentFermentingBatch()
+	{
+		assertEquals(2_800L, WineProgressCalculator.bankedXp(14));
+	}
+
+	@Test
+	public void bankedXpCannotBeNegative()
+	{
+		assertEquals(0L, WineProgressCalculator.bankedXp(-1));
+	}
+
+	@Test
 	public void timeUntil99UsesCurrentWineRate()
 	{
 		assertEquals(90_000, WineProgressCalculator.secondsUntil99(50_000, 2_000));

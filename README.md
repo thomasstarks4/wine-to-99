@@ -10,6 +10,7 @@ A RuneLite sidebar plugin for tracking a wine-making grind to level 99 Cooking.
 
 - Successful jugs of wine still needed for exactly 13,034,431 Cooking XP.
 - Unfermented wines currently in your inventory and most recently opened bank.
+- Potential banked Cooking XP from the currently fermenting wines.
 - Grapes and jugs of water in the most recently observed bank contents.
 - Wines mixed per active hour, including both fermenting and finished wines.
 - Potential Cooking XP per active hour at 200 XP per wine mixed.

@@ -40,6 +40,11 @@ final class WineProgressCalculator
 		return Math.max(0, successfulWinesRequired - Math.max(0, fermentingWines));
 	}
 
+	static long bankedXp(int fermentingWines)
+	{
+		return (long) Math.max(0, fermentingWines) * XP_PER_WINE;
+	}
+
 	/**
 	 * Estimates the time needed to finish the goal at the current production rate.
 	 * Returns {@code -1} until a production rate is available.
